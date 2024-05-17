@@ -1,0 +1,30 @@
+version: '3.9'
+services:
+  db:
+    container_name: db
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+    - "27017:27017"
+
+  produits:
+    build: ./produit
+    container_name: produit-service-dockercompose
+    ports:
+      - "4000:3000"
+    volumes:
+      - /app/node_modules
+    depends_on:
+      - db
+
+  commande:
+    build: ./commande
+    container_name: commande-service-dockercompose
+    ports:
+      - "4001:3001"
+    volumes:
+      - /app/node_modules
+    depends_on:
+      - produits
+      - db
